@@ -1,0 +1,88 @@
+{
+    "query": [
+      {
+        "code": "Postinumeroalue",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "*"
+          ]
+        }
+      },
+      {
+        "code": "Tiedot",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "pinta_ala",
+            "he_vakiy",
+            "he_miehet",
+            "he_naiset",
+            "he_kika",
+            "he_0_2",
+            "he_3_6",
+            "he_7_12",
+            "he_13_15",
+            "he_16_17",
+            "he_18_19",
+            "he_20_24",
+            "he_25_29",
+            "he_30_34",
+            "he_35_39",
+            "he_40_44",
+            "he_45_49",
+            "he_50_54",
+            "he_55_59",
+            "he_60_64",
+            "he_65_69",
+            "he_70_74",
+            "he_75_79",
+            "he_80_84",
+            "he_85_",
+            "ko_yliop",
+            "ko_al_kork",
+            "ko_yl_kork",
+            "hr_ktu",
+            "hr_mtu",
+            "te_taly",
+            "te_as_valj",
+            "te_yks",
+            "te_laps",
+            "te_elak",
+            "te_omis_as",
+            "te_vuok_as",
+            "tr_kuty",
+            "ra_ke",
+            "ra_raky",
+            "ra_asunn",
+            "ra_as_kpa",
+            "ra_pt_as",
+            "ra_kt_as",
+            "ra_muu_as",
+            "tp_tyopy",
+            "tp_alku_a",
+            "tp_jalo_bf",
+            "tp_palv_gu",
+            "pt_vakiy",
+            "pt_tyoll",
+            "pt_tyott",
+            "pt_0_14",
+            "pt_opisk",
+            "pt_elakel"
+          ]
+        }
+      },
+      {
+        "code": "Vuosi",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "2021"
+          ]
+        }
+      }
+    ],
+    "response": {
+      "format": "json"
+    }
+}

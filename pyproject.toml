@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "living-area-mapper"
+version = "0.1.0"
+description = "The application finds similar postal code areas from the 6 largest municipalities in Finland."
+authors = ["shiftleino <shiftleino@gmail.com>"]
+readme = "README.md"
+packages = [{include = "living_area_mapper"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
