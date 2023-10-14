@@ -1,0 +1,34 @@
+{
+    "query": [
+      {
+        "code": "Vuosi",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "2022"
+          ]
+        }
+      },
+      {
+        "code": "Talotyyppi",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "1"
+          ]
+        }
+      },
+      {
+        "code": "Tiedot",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "keskihinta_aritm_nw"
+          ]
+        }
+      }
+    ],
+    "response": {
+      "format": "json"
+    }
+}

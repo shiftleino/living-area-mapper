@@ -4,11 +4,11 @@ version = "0.1.0"
 description = "The application finds similar postal code areas from the 6 largest municipalities in Finland."
 authors = ["shiftleino <shiftleino@gmail.com>"]
 readme = "README.md"
-packages = [{include = "living_area_mapper"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "3.11.6"
 requests = "^2.31.0"
+pandas = "^2.1.1"
 
 
 [build-system]

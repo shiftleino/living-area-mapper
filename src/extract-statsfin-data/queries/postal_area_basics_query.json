@@ -4,9 +4,7 @@
         "code": "Postinumeroalue",
         "selection": {
           "filter": "item",
-          "values": [
-            "*"
-          ]
+          "values": []
         }
       },
       {
@@ -59,10 +57,6 @@
             "ra_pt_as",
             "ra_kt_as",
             "ra_muu_as",
-            "tp_tyopy",
-            "tp_alku_a",
-            "tp_jalo_bf",
-            "tp_palv_gu",
             "pt_vakiy",
             "pt_tyoll",
             "pt_tyott",

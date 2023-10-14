@@ -1,0 +1,48 @@
+{
+    "query": [
+      {
+        "code": "Vuosi",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "2022"
+          ]
+        }
+      },
+      {
+        "code": "Kunta",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "049",
+            "091",
+            "564",
+            "837",
+            "853",
+            "092"
+          ]
+        }
+      },
+      {
+        "code": "Talotyyppi",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "3"
+          ]
+        }
+      },
+      {
+        "code": "Tiedot",
+        "selection": {
+          "filter": "item",
+          "values": [
+            "keskihinta_aritm_nw"
+          ]
+        }
+      }
+    ],
+    "response": {
+      "format": "json"
+    }
+}
