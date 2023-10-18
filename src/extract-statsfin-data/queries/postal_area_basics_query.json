@@ -57,7 +57,6 @@
             "ra_pt_as",
             "ra_kt_as",
             "ra_muu_as",
-            "pt_vakiy",
             "pt_tyoll",
             "pt_tyott",
             "pt_0_14",
@@ -71,7 +70,7 @@
         "selection": {
           "filter": "item",
           "values": [
-            "2021"
+            ""
           ]
         }
       }
