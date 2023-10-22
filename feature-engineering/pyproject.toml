@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "postal-area-features"
+version = "0.1.0"
+description = "This package creates the features for the living area mapping from the StatsFin data."
+authors = ["shiftleino <shiftleino@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.6"
+pandas = "^2.1.1"
+numpy = "^1.26.1"
+scikit-learn = "^1.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

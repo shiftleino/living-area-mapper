@@ -8,7 +8,7 @@ from api_calls import extract_apartment_price_info_for_areas, \
 
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
 )
@@ -27,11 +27,11 @@ def main():
     apartment_prices_areas = extract_apartment_price_info_for_areas(config["sources"]["apartment_prices_area_url"])
     apartment_prices_municipalities = extract_apartment_price_info_for_municipalities(config["sources"]["apartment_prices_municipality_url"])
 
-    postal_code_info_latest.to_csv("./data/postal_code_info_latest.csv", index=True, sep=";", index_label="Postal code")
-    postal_code_info_old.to_csv("./data/postal_code_info_old.csv", index=True, sep=";", index_label="Postal code")
-    apartment_prices_areas.to_csv("./data/apartment_prices_areas.csv", index=True, sep=";", index_label="Postal code")
-    apartment_prices_municipalities.to_csv("./data/apartment_prices_municipalities.csv", index=True, sep=";")
-    postal_code_mapping.to_csv("./data/postal_code_mapping.csv", index=False, sep=";")
+    postal_code_info_latest.to_csv("../data/postal_code_info_latest.csv", index=True, sep=";", index_label="Postal code")
+    postal_code_info_old.to_csv("../data/postal_code_info_old.csv", index=True, sep=";", index_label="Postal code")
+    apartment_prices_areas.to_csv("../data/apartment_prices_areas.csv", index=True, sep=";", index_label="Postal code")
+    apartment_prices_municipalities.to_csv("../data/apartment_prices_municipalities.csv", index=True, sep=";")
+    postal_code_mapping.to_csv("../data/postal_code_mapping.csv", index=False, sep=";")
 
 
 if __name__ == "__main__":

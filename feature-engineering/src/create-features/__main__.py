@@ -2,17 +2,34 @@ import pandas as pd
 import numpy as np
 from sklearn import preprocessing
 import feature_processing
+import logging
 
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Fix postal codes to have leading zeros and handle missing data.
+    """
     df["Postal code"] = df["Postal code"].astype(str).str.pad(width=5, side='left', fillchar="0")
     df = df.replace(["...", "..", "."], 0).fillna(0)
     return df
 
 def normalize_features(features: pd.DataFrame) -> pd.DataFrame:
+    """Normalize features by scaling them to mean zero and standard deviation of one.
+    In addition, clip change in population to maximum of 200% growth as there might be,
+    cases in the data where there was no population before, thus causing outliers for
+    values in the change in population feature. The function also applies log scaling
+    for population density as this feature has a wide range of values with a long right tail,
+    which should not affect too much on the end result inferences.
+    """
     features["Change in population"] = np.where(features["Change in population"] > 2, 2, features["Change in population"])
     with np.errstate(divide="ignore"):
-        features["Population density"] = np.where(features["Population density"] > 0, np.log(features["Population density"]), features["Population density"])
+        minimum_log_pop_density = np.log(features.loc[features["Population density"] > 0, ["Population density"]]).min()
+        features["Population density"] = np.where(features["Population density"] > 0, np.log(features["Population density"]), minimum_log_pop_density)
     feature_array = features.iloc[:,2:].to_numpy()
     scaler = preprocessing.StandardScaler()
     standard_features = scaler.fit_transform(feature_array)
@@ -54,6 +71,7 @@ def main():
                                     "Median income", "Higher education ratio", "Households living on rent ratio", "Block apartment ratio"]]
 
     for municipality in postal_code_info["municipality"].unique():
+        logging.info(f"Normalizing features for {municipality} and outputting the result as a csv-file")
         muni_features = normalize_features(features.loc[features["municipality"] == municipality,:].copy())
         muni_features.to_csv(f"~/dev/uni/tkt/living-area-mapper/data/{municipality}_features.csv", sep=";", index=False)
     raw_data.to_csv("~/dev/uni/tkt/living-area-mapper/data/raw_data.csv", sep=";", index=False)
