@@ -14,6 +14,8 @@ logging.basicConfig(
 )
 
 def load_config():
+    """Load configuration details related to URLs.
+    """
     with open(os.path.join(os.path.dirname(__file__), "config.toml"), mode="rb") as file:
         config = tomllib.load(file)
     return config

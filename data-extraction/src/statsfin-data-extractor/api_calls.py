@@ -7,7 +7,9 @@ import re
 import csv
 
 
-def extract_postal_code_mapping(url):
+def extract_postal_code_mapping(url: str) -> pd.DataFrame:
+    """Extract the postal codes and their names from StatsFin API.
+    """
     with open(os.path.join(os.path.dirname(__file__), "queries", "postal_codes_query.json"), "r") as file:
         query = json.load(file)
     response = requests.post(url=url, json=query)
@@ -21,7 +23,9 @@ def extract_postal_code_mapping(url):
     filtered_df = df.loc[df["municipality"].isin(["Helsinki", "Espoo", "Tampere", "Oulu", "Vantaa", "Turku"]),:]
     return filtered_df
 
-def extract_postal_code_info(url, postal_codes, year):
+def extract_postal_code_info(url: str, postal_codes: list[str], year: str) -> pd.DataFrame:
+    """Extract information related to postal codes of the specified year from StatsFin API.
+    """
     with open(os.path.join(os.path.dirname(__file__), "queries", "postal_area_basics_query.json"), "r") as file:
         query = json.load(file)
     query["query"][0]["selection"]["values"] = postal_codes
@@ -39,7 +43,9 @@ def extract_postal_code_info(url, postal_codes, year):
     df = pd.DataFrame.from_dict(result, orient="index", columns=columns)
     return df
 
-def extract_apartment_price_info_for_areas(url):
+def extract_apartment_price_info_for_areas(url: str) -> pd.DataFrame:
+    """Extract apartment price information of postal code areas from StatsFin API.
+    """
     with open(os.path.join(os.path.dirname(__file__), "queries", "apartment_price_query.json"), "r") as file:
         query = json.load(file)
     response = requests.post(url, json=query)
@@ -53,7 +59,9 @@ def extract_apartment_price_info_for_areas(url):
     df = pd.DataFrame.from_dict(result, orient="index", columns=["Neliöhinta EUR/m2"])
     return df
 
-def extract_apartment_price_info_for_municipalities(url):
+def extract_apartment_price_info_for_municipalities(url: str) -> pd.DataFrame:
+    """Extract apartment price information of municipalities from StatsFin API.
+    """
     with open(os.path.join(os.path.dirname(__file__), "queries", "apartment_price_municipality_query.json"), "r") as file:
         query = json.load(file)
     response = requests.post(url, json=query)
