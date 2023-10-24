@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "postal-area-mappings"
+version = "0.1.0"
+description = "This package contains the code for creating the postal code area mappings."
+authors = ["shiftleino <shiftleino@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.6"
+pandas = "^2.1.1"
+numpy = "^1.26.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
