@@ -10,6 +10,7 @@ import csv
 def extract_postal_code_mapping(url: str) -> pd.DataFrame:
     """Extract the postal codes and their names from StatsFin API.
     """
+    logging.info("Extracting names for postal code areas")
     with open(os.path.join(os.path.dirname(__file__), "queries", "postal_codes_query.json"), "r") as file:
         query = json.load(file)
     response = requests.post(url=url, json=query)
@@ -21,11 +22,13 @@ def extract_postal_code_mapping(url: str) -> pd.DataFrame:
     postal_code_mapping = [[pair[0], pair[1].split("(")[0].strip(),  pair[1].split("(")[1].replace(")", "")] for pair in postal_codes_combined]
     df = pd.DataFrame(postal_code_mapping, columns=["Postal code", "name", "municipality"])
     filtered_df = df.loc[df["municipality"].isin(["Helsinki", "Espoo", "Tampere", "Oulu", "Vantaa", "Turku"]),:]
+    logging.info(f"Received {len(filtered_df.index)} postal code area names")
     return filtered_df
 
 def extract_postal_code_info(url: str, postal_codes: list[str], year: str) -> pd.DataFrame:
     """Extract information related to postal codes of the specified year from StatsFin API.
     """
+    logging.info(f"Extracting postal code information of year {year}")
     with open(os.path.join(os.path.dirname(__file__), "queries", "postal_area_basics_query.json"), "r") as file:
         query = json.load(file)
     query["query"][0]["selection"]["values"] = postal_codes
@@ -41,13 +44,16 @@ def extract_postal_code_info(url: str, postal_codes: list[str], year: str) -> pd
         result[code] = area["values"]
     columns = [column["text"] for column in content["columns"][2:]]
     df = pd.DataFrame.from_dict(result, orient="index", columns=columns)
+    logging.info(f"Received information for {len(df.index)} postal code areas")
     return df
 
-def extract_apartment_price_info_for_areas(url: str) -> pd.DataFrame:
-    """Extract apartment price information of postal code areas from StatsFin API.
+def extract_apartment_price_info_for_areas(url: str, year: str) -> pd.DataFrame:
+    """Extract apartment price information of postal code areas for the specified year from StatsFin API.
     """
+    logging.info(f"Extracting apartment price information for postal code areas of year {year}")
     with open(os.path.join(os.path.dirname(__file__), "queries", "apartment_price_query.json"), "r") as file:
         query = json.load(file)
+    query["query"][0]["selection"]["values"] = [year]
     response = requests.post(url, json=query)
     if response.status_code != 200:
         logging.error(f"Request to Postal code API server failed with status code: {response.status_code}")
@@ -57,13 +63,16 @@ def extract_apartment_price_info_for_areas(url: str) -> pd.DataFrame:
     for area in content["data"]:
         result[area["key"][1]] = area["values"][0].replace(".", "")
     df = pd.DataFrame.from_dict(result, orient="index", columns=["Neliöhinta EUR/m2"])
+    logging.info(f"Received apartment prices for {len(df.index)} postal code areas")
     return df
 
-def extract_apartment_price_info_for_municipalities(url: str) -> pd.DataFrame:
-    """Extract apartment price information of municipalities from StatsFin API.
+def extract_apartment_price_info_for_municipalities(url: str, year: str) -> pd.DataFrame:
+    """Extract apartment price information of municipalities for the specified year from StatsFin API.
     """
+    logging.info(f"Extracting apartment price information for municipalities of year {year}")
     with open(os.path.join(os.path.dirname(__file__), "queries", "apartment_price_municipality_query.json"), "r") as file:
         query = json.load(file)
+    query["query"][0]["selection"]["values"] = [year]
     response = requests.post(url, json=query)
     if response.status_code != 200:
         logging.error(f"Request to Postal code API server failed with status code: {response.status_code}")
