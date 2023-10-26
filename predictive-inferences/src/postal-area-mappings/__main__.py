@@ -1,6 +1,13 @@
 import pandas as pd
 import numpy as np
+import logging
 
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     """Fix postal codes to have leading zeros.
@@ -12,10 +19,12 @@ def compute_mappings(all_features: list[pd.DataFrame]) -> pd.DataFrame:
     """Computes for each living area the similarity measures to other areas and selects as the closest area
     for the municipality the area with the smallest distance.
     """
+    logging.info("Computing the closest living areas in each municipality for every living area.")
     result = {}
     columns = ["Helsinki", "Espoo", "Vantaa", "Turku", "Tampere", "Oulu"]
 
     for i in range(6):
+        logging.info(f"Computing the living area mappings for areas in {columns[i]}")
         source_feature_df = all_features[i]
         source_amount = len(source_feature_df.index)
         for idx in range(source_amount):
@@ -49,7 +58,7 @@ def main():
     all_features = [helsinki_features, espoo_features, vantaa_features, turku_features, tampere_features, oulu_features]
     area_mappings = compute_mappings(all_features)
 
-    area_mappings.to_csv("~/dev/uni/tkt/living-area-mapper/data/living_area_mappings.csv", sep=";", index=True, index_label="Postal code")
+    area_mappings.to_csv("~/dev/uni/tkt/living-area-mapper/data/living_area_mappings.csv", sep=",", index=True, index_label="Postal code", quoting=1)
 
 
 if __name__ == "__main__":
