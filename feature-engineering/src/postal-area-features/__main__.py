@@ -62,10 +62,6 @@ def main():
     apartment_prices = feature_processing.process_apartment_prices(apartment_prices_areas, apartment_prices_municipalities, postal_code_mapping)
     postal_code_info = postal_code_info.merge(apartment_prices, how="left", on="Postal code")
     
-    raw_data = postal_code_info.loc[:, ["Postal code", "municipality", "Apartment price", "Change in population",
-                                    "Middle age", "Student ratio", "Unemployment rate", "Pensioner ratio", "Housing density", 
-                                    "Population density", "Median income", "Higher education ratio", "Households living on rent ratio", 
-                                    "Block apartment ratio"]]
     features = postal_code_info.loc[:, ["Postal code", "municipality", "Apartment price", "Change in population", "Middle age",
                                     "Student ratio", "Unemployment rate", "Pensioner ratio", "Housing density", "Population density", 
                                     "Median income", "Higher education ratio", "Households living on rent ratio", "Block apartment ratio"]]
@@ -74,7 +70,7 @@ def main():
         logging.info(f"Normalizing features for {municipality} and outputting the result as a csv-file")
         muni_features = normalize_features(features.loc[features["municipality"] == municipality,:].copy())
         muni_features.to_csv(f"~/dev/uni/tkt/living-area-mapper/data/{municipality}_features.csv", sep=";", index=False)
-    raw_data.to_csv("~/dev/uni/tkt/living-area-mapper/data/raw_data.csv", sep=";", index=False)
+    postal_code_info.to_csv("~/dev/uni/tkt/living-area-mapper/data/raw_data.csv", sep=",", index=False, quoting=1)
 
 
 if __name__ == "__main__":
