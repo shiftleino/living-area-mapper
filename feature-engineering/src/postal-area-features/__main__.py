@@ -15,7 +15,7 @@ logging.basicConfig(
 )
 
 def load_config():
-    """Load configuration details related to URLs.
+    """Load configuration details related to GCP.
     """
     with open(os.path.join(os.path.dirname(__file__), "config.toml"), mode="rb") as file:
         config = tomllib.load(file)
