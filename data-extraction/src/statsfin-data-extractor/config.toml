@@ -2,3 +2,7 @@
 postal_code_url = "https://pxdata.stat.fi:443/PxWeb/api/v1/fi/Postinumeroalueittainen_avoin_tieto/uusin/paavo_pxt_12f7.px"
 apartment_prices_area_url = "https://pxdata.stat.fi:443/PxWeb/api/v1/fi/StatFin/ashi/statfin_ashi_pxt_13mu.px"
 apartment_prices_municipality_url = "https://pxdata.stat.fi:443/PxWeb/api/v1/fi/StatFin/ashi/statfin_ashi_pxt_13mx.px"
+
+[cloud]
+project_id = ""
+bucket_name = ""
