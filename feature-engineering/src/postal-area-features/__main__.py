@@ -1,8 +1,11 @@
+from google.cloud import storage
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
 import feature_processing
 import logging
+import tomllib
+import os
 
 
 logging.basicConfig(
@@ -10,6 +13,13 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
 )
+
+def load_config():
+    """Load configuration details related to URLs.
+    """
+    with open(os.path.join(os.path.dirname(__file__), "config.toml"), mode="rb") as file:
+        config = tomllib.load(file)
+    return config
 
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     """Fix postal codes to have leading zeros and handle missing data.
@@ -37,14 +47,32 @@ def normalize_features(features: pd.DataFrame) -> pd.DataFrame:
     return features
 
 def main():
-    postal_code_mapping = pd.read_csv("~/dev/uni/tkt/living-area-mapper/data/postal_code_mapping.csv", sep=";")
+    config = load_config()
+    logging.info("Creating client for authenticating to GCP")
+    storage_client = storage.Client(project=config["cloud"]["project_id"])
+    raw_data_bucket = storage_client.bucket(config["cloud"]["bucket_name_raw_data"])
+    postal_code_mapping_blob = raw_data_bucket.blob("postal_code_mapping.csv")
+    postal_code_info_latest_blob = raw_data_bucket.blob("postal_code_info_latest.csv")
+    postal_code_info_old_blob = raw_data_bucket.blob("postal_code_info_old.csv")
+    apartment_prices_areas_blob = raw_data_bucket.blob("apartment_prices_areas.csv")
+    apartment_prices_municipalities_blob = raw_data_bucket.blob("apartment_prices_municipalities.csv")
+
+    logging.info("Downloading the csv-files from the GCP cloud storage bucket")
+    postal_code_mapping_blob.download_to_filename("postal_code_mapping.csv")
+    postal_code_info_latest_blob.download_to_filename("postal_code_info_latest.csv")
+    postal_code_info_old_blob.download_to_filename("postal_code_info_old.csv")
+    apartment_prices_areas_blob.download_to_filename("apartment_prices_areas.csv")
+    apartment_prices_municipalities_blob.download_to_filename("apartment_prices_municipalities.csv")
+
+    logging.info("Reading the downloaded csv-files to Pandas dataframes")
+    postal_code_mapping = pd.read_csv("./postal_code_mapping.csv", sep=";")
     postal_code_mapping = preprocess_data(postal_code_mapping)
-    postal_code_info_latest = pd.read_csv("~/dev/uni/tkt/living-area-mapper/data/postal_code_info_latest.csv", sep=";")
+    postal_code_info_latest = pd.read_csv("./postal_code_info_latest.csv", sep=";")
     postal_code_info_latest = preprocess_data(postal_code_info_latest)
-    postal_code_info_old = pd.read_csv("~/dev/uni/tkt/living-area-mapper/data/postal_code_info_old.csv", sep=";")
+    postal_code_info_old = pd.read_csv("./postal_code_info_old.csv", sep=";")
     postal_code_info_old = preprocess_data(postal_code_info_old)
-    apartment_prices_areas = pd.read_csv("~/dev/uni/tkt/living-area-mapper/data/apartment_prices_areas.csv", sep=";")
-    apartment_prices_municipalities = pd.read_csv("~/dev/uni/tkt/living-area-mapper/data/apartment_prices_municipalities.csv", sep=";")
+    apartment_prices_areas = pd.read_csv("./apartment_prices_areas.csv", sep=";")
+    apartment_prices_municipalities = pd.read_csv("./apartment_prices_municipalities.csv", sep=";")
     apartment_prices_areas = preprocess_data(apartment_prices_areas)
     
     postal_code_info = feature_processing.calculate_population_growth(postal_code_info_latest, postal_code_info_old)
@@ -66,11 +94,18 @@ def main():
                                     "Student ratio", "Unemployment rate", "Pensioner ratio", "Housing density", "Population density", 
                                     "Median income", "Higher education ratio", "Households living on rent ratio", "Block apartment ratio"]]
 
+    features_bucket = storage_client.bucket(config["cloud"]["bucket_name_features"])
     for municipality in postal_code_info["municipality"].unique():
-        logging.info(f"Normalizing features for {municipality} and outputting the result as a csv-file")
+        logging.info(f"Normalizing features for {municipality} and uploading the result as a csv-file to GCP cloud storage bucket")
         muni_features = normalize_features(features.loc[features["municipality"] == municipality,:].copy())
-        muni_features.to_csv(f"~/dev/uni/tkt/living-area-mapper/data/{municipality}_features.csv", sep=";", index=False)
-    postal_code_info.to_csv("~/dev/uni/tkt/living-area-mapper/data/raw_data.csv", sep=",", index=False, quoting=1)
+        muni_features_blob = features_bucket.blob(f"{municipality}_features.csv")
+        muni_features_blob.upload_from_string(muni_features.to_csv(sep=";", index=False))
+    
+    app_data_bucket = storage_client.bucket(config["cloud"]["bucket_name_app_data"])
+
+    logging.info("Uploading the raw data as csv-file to GCP cloud storage bucket")
+    postal_code_info_blob = app_data_bucket.blob("raw_data.csv")
+    postal_code_info_blob.upload_from_string(postal_code_info.to_csv(sep=",", index=False, quoting=1))
 
 
 if __name__ == "__main__":
