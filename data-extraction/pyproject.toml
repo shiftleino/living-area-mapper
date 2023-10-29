@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "statsfin-data-extractor"
+name = "statfin-data-extractor"
 version = "0.1.0"
 description = "This Python package extracts data from StatsFin API for postal code area analysis."
 authors = ["shiftleino <shiftleino@gmail.com>"]

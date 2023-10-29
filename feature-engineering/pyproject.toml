@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "postal-area-features"
+name = "living-area-features"
 version = "0.1.0"
 description = "This package creates the features for the living area mapping from the StatsFin data."
 authors = ["shiftleino <shiftleino@gmail.com>"]

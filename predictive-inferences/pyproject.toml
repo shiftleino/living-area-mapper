@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "postal-area-mappings"
+name = "living-area-mappings"
 version = "0.1.0"
 description = "This package contains the code for creating the postal code area mappings."
 authors = ["shiftleino <shiftleino@gmail.com>"]
