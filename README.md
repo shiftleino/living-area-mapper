@@ -10,7 +10,7 @@ Link to the application: https://lookerstudio.google.com/reporting/3dbccbd5-a076
 The data is loaded from Stat.fi with [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fi)-license.
 
 ## How to run
-1. Change to the folder data-extraction ```cd data-extraction``````
+1. Change to the folder data-extraction ```cd data-extraction```
 2. Modify cloud parameters in config.toml file
 3. Install dependencies: ```poetry install```
 4. Spawn a shell in virtual environment: ```poetry shell```
